@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaFacebookMessenger, FaBell, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider";
 import logo from "../../images/logo.png";
 
 const Navbar = () => {
+  const { userData, user, editEmail } = useContext(AuthContext);
+
   return (
     <div>
-      <div className="navbar bg-green-600 fixed">
+      <div className="navbar bg-green-600 z-20 fixed">
         <div className="navbar-start">
           <Link to="/">
             <img src={logo} alt="" className="w-28 h-auto" />
@@ -56,35 +59,26 @@ const Navbar = () => {
                 <span className="badge badge-xs badge-primary indicator-item"></span>
               </div>
             </button>
-            <div className="dropdown">
+            <div className="dropdown  hidden md:flex">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h7"
-                  />
-                </svg>
+                <img
+                  src={userData?.img}
+                  alt=""
+                  className="rounded-full w-10 h-10"
+                />
               </label>
               <ul
                 tabIndex={0}
-                className="menu right-0 menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+                className="menu -right-2 top-11 menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <Link>Homepage</Link>
+                  <Link to="/editProfile">Edit Profile</Link>
                 </li>
                 <li>
-                  <Link>Portfolio</Link>
+                  <Link>Edit Password</Link>
                 </li>
                 <li>
-                  <Link>About</Link>
+                  <button onClick={editEmail}>Edit Password</button>
                 </li>
               </ul>
             </div>

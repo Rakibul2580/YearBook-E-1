@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
@@ -11,47 +12,66 @@ const SingIn = () => {
   const { signUp, signIn, profile } = useContext(AuthContext);
   const navigate = useNavigate();
   const [data, setData] = useState(true);
+  const [animate, SetAnimate] = useState(false);
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+  const x = "28273534f15193232bf3f2551f053a4c";
 
-  const handelSignUp = (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const fastName = form.fastName.value;
-    const lastName = form.lastName.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    const birthday = form.date.value;
-    const gender = form.gender.value;
-    const user = {
-      fastName,
-      lastName,
-      email,
-      password,
-      birthday,
-      gender,
-    };
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const handelSignUp = (data) => {
+    SetAnimate(true);
+    const { fastName, lastName, email, password, birthday, gender } = data;
 
-    signUp(email, password)
+    const img = data.image[0];
+    const formData = new FormData();
+    formData.append("image", img);
+    const url = "https://api.imgbb.com/1/upload";
+    fetch(`${url}?key=${x}`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
       .then((result) => {
-        fetch("http://localhost:5000/user", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(user),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            const name = fastName + " " + lastName;
-            profile(name);
-            toast.success("SingUp Successfully");
-            localStorage.setItem("Token", JSON.stringify(result.user.uid));
-            navigate(from, { replace: true });
+        const url = result.data.display_url;
+        const user = {
+          fastName,
+          lastName,
+          email,
+          password,
+          birthday,
+          gender,
+          img: url,
+        };
+        signUp(email, password)
+          .then((result) => {
+            fetch("http://localhost:5000/user", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(user),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                const name = fastName + " " + lastName;
+                SetAnimate(false);
+                profile(name, url);
+                toast.success("SingUp Successfully");
+                localStorage.setItem("Token", JSON.stringify(result.user.uid));
+                navigate(from, { replace: true });
+              })
+              .catch((err) => console.log(err));
           })
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
+
+    reset();
   };
   const handelSignIn = (event) => {
     event.preventDefault();
@@ -88,7 +108,7 @@ const SingIn = () => {
             </p>
           </div>
           <form
-            onSubmit={handelSignUp}
+            onSubmit={handleSubmit(handelSignUp)}
             className="space-y-8 ng-untouched ng-pristine ng-valid"
           >
             <div className="space-y-4">
@@ -96,8 +116,7 @@ const SingIn = () => {
                 <div className="space-y-2">
                   <input
                     type="text"
-                    name="fastName"
-                    required
+                    {...register("fastName", { required: true })}
                     placeholder="Fast Name *"
                     className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                   />
@@ -105,8 +124,7 @@ const SingIn = () => {
                 <div className="space-y-2">
                   <input
                     type="text"
-                    name="lastName"
-                    required
+                    {...register("lastName", { required: true })}
                     placeholder="Last Name *"
                     className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                   />
@@ -114,9 +132,16 @@ const SingIn = () => {
               </div>
               <div className="space-y-2">
                 <input
+                  type="file"
+                  {...register("image", { required: true })}
+                  placeholder="Mobile number or email *"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                />
+              </div>
+              <div className="space-y-2">
+                <input
                   type="email"
-                  name="email"
-                  required
+                  {...register("email", { required: true })}
                   placeholder="Mobile number or email *"
                   className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                 />
@@ -124,8 +149,7 @@ const SingIn = () => {
               <div className="space-y-2">
                 <input
                   type="password"
-                  name="password"
-                  required
+                  {...register("password", { required: true })}
                   placeholder="Password *"
                   className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                 />
@@ -138,8 +162,7 @@ const SingIn = () => {
                 </label>
                 <input
                   type="date"
-                  name="date"
-                  required
+                  {...register("birthday", { required: true })}
                   className="w-full px-3 py-[8px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                 />
               </div>
@@ -148,8 +171,7 @@ const SingIn = () => {
                   Gender *
                 </label>
                 <select
-                  required
-                  name="gender"
+                  {...register("gender", { required: true })}
                   className="w-full px-3 py-[9.5px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
                 >
                   <option defaultValue>Select Gender</option>
@@ -159,12 +181,23 @@ const SingIn = () => {
                 </select>
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
-            >
-              Sign up
-            </button>
+            {errors.exampleRequired && <span>This field is required</span>}
+            {!animate && (
+              <button
+                type="submit"
+                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
+              >
+                Sign up
+              </button>
+            )}
+            {animate && (
+              <button
+                type="submit"
+                className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
+              >
+                <div className="w-6 h-6  border-4 border-dashed rounded-full animate-spin dark:border-white"></div>
+              </button>
+            )}
           </form>
 
           <div className="my-6 space-y-4"></div>

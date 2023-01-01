@@ -4,7 +4,8 @@ import { AuthContext } from "../../context/AuthProvider";
 
 const Modal = ({ SetModal }) => {
   const { user } = useContext(AuthContext);
-  const { displayName, email } = user;
+  const displayName = user?.displayName;
+  const email = user?.email;
 
   const {
     register,
@@ -88,12 +89,6 @@ const Modal = ({ SetModal }) => {
                 Login
               </button>
             </form>
-            {/* <form onSubmit={handleSubmit(handelPost)}>
-              <input {...register("text")} />
-              <input type="file" {...register("image", { required: true })} />
-              {errors.exampleRequired && <span>This field is required</span>}
-              <input type="submit" />
-            </form> */}
           </div>
         </div>
       </div>
