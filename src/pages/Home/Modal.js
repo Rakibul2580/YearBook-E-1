@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/AuthProvider";
 
 const Modal = ({ SetModal }) => {
-  const { user } = useContext(AuthContext);
+  const { user, userData } = useContext(AuthContext);
   const displayName = user?.displayName;
   const email = user?.email;
 
@@ -27,14 +27,16 @@ const Modal = ({ SetModal }) => {
       .then((res) => res.json())
       .then((result) => {
         const post = {
-          user: { name: displayName, email: email, img: "" },
+          userName: displayName,
+          userEmail: email,
+          userImg: userData.img,
           title: data.text,
           img: result.data.display_url,
           like: [],
           comments: [],
         };
         SetModal("1");
-        fetch("http://localhost:5000/post", {
+        fetch("https://yourbookserver-rakibul2580.vercel.app/post", {
           method: "POST",
           headers: {
             "content-type": "application/json",

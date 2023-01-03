@@ -4,17 +4,22 @@ import { FcBusinessman } from "react-icons/fc";
 import { FaRegThumbsUp, FaRegCommentDots } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthProvider";
 import CommentModal from "./CommentModal";
+import { Vortex } from "react-loader-spinner";
 
 const Home = () => {
   const [modal, SetModal] = useState("");
   const [comments, SetComments] = useState({});
   const [posts, setPosts] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { user, userData } = useContext(AuthContext);
   const [count, setCount] = useState(true);
+  const [loader, setLoader] = useState(true);
   useEffect(() => {
-    fetch("http://localhost:5000/post")
+    fetch("https://yourbookserver-rakibul2580.vercel.app/post")
       .then((res) => res.json())
-      .then((data) => setPosts(data))
+      .then((data) => {
+        setPosts(data);
+        setLoader(false);
+      })
       .catch((err) => console.log(err));
   }, [count]);
 
@@ -27,11 +32,11 @@ const Home = () => {
     };
 
     const match = posts.find((post) => post._id === id);
-    const likeMatch = match.like.find((post) => post?.emil === user?.emil);
+    const likeMatch = match.like.find((post) => post?.email === user?.email);
     if (likeMatch) {
       handelDelete(likeMatch, id);
     } else {
-      fetch(`http://localhost:5000/post/${id}`, {
+      fetch(`https://yourbookserver-rakibul2580.vercel.app/post/${id}`, {
         method: "PUT",
         headers: {
           "content-type": "application/json",
@@ -45,7 +50,7 @@ const Home = () => {
   };
 
   const handelDelete = (likeMatch, id) => {
-    fetch(`http://localhost:5000/like/${id}`, {
+    fetch(`https://yourbookserver-rakibul2580.vercel.app/like/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
@@ -56,34 +61,52 @@ const Home = () => {
       .then((data) => setCount(!count))
       .catch((err) => console.log(err));
   };
+  if (loader) {
+    return (
+      <div className="flex justify-center">
+        <Vortex
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="vortex-loading"
+          wrapperStyle={{}}
+          wrapperClass="vortex-wrapper"
+          colors={["red", "green", "blue", "yellow", "orange", "purple"]}
+        />
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <div className="bg-gray-100 pt-3">
       <div className="flex justify-start items-center">
         <div className=" avatar online ml-2">
           <div className="w-10 bg-slate-200 rounded-full">
-            <FcBusinessman className="text-4xl ml-[2px]"></FcBusinessman>
+            <img src={userData?.img} alt="" />
           </div>
         </div>
         <label
           htmlFor="my-modal"
-          className="btn ml-3 btn-sm bg-gray-200 border-0"
+          className="btn w-[84%] ml-3 btn-sm bg-gray-200 border-0"
         >
           What's on your mind, Rakibul?
         </label>
       </div>
       {posts.map((post) => (
-        <div key={post._id} className="shadow-inner rounded-xl">
+        <div
+          key={post._id}
+          className="shadow-inner my-2 bg-white rounded-xl w-full"
+        >
           <div className="flex items-center mb-2 mt-4 pt-4">
             <div>
-              {post?.user?.img && (
+              {post?.userImg && (
                 <div className="avatar online">
                   <div className="w-10 bg-slate-200 rounded-full">
                     <img src={post?.user?.img} alt="" />
                   </div>
                 </div>
               )}
-              {!post?.user?.img && (
+              {!post?.userImg && (
                 <div className=" avatar online ml-2">
                   <div className="w-10 bg-slate-200 rounded-full">
                     <FcBusinessman className="text-4xl ml-[2px]"></FcBusinessman>
@@ -92,12 +115,12 @@ const Home = () => {
               )}
             </div>
             <div className="text-left ml-4">
-              <h1>{post?.user?.name}</h1>
+              <h1>{post?.userName}</h1>
               <p>{post?.date.slice(0, 16).replace("T", "-")}</p>
             </div>
           </div>
           <h1 className="mb-2 text-left px-2">{post?.title}</h1>
-          <img src={post?.img} alt="" className="w-full" />
+          <img src={post?.img} alt="" className="w-full rounded-sm" />
           <div className="flex justify-around py-2 border-y-2 mt-3">
             <button
               onClick={() => handelLike(post._id)}

@@ -9,16 +9,16 @@ const Main = () => {
     <div>
       <Navbar />
       <div className="flex">
-        <div className="w-[25%]">
-          <div className="sticky top-16 left-0">
+        <div className="w-[25%] ">
+          <div className="fixed top-16 left-0 right-[75%]">
             <LeftSidebar />
           </div>
         </div>
-        <div className="w-[50%] mt-20 text-center">
+        <div className="w-[50%] mt-16 text-center">
           <Outlet />
         </div>
-        <div className="w-[25%] mt-20">
-          <div className="sticky top-20 left-0">
+        <div className="w-[25%] mt-16">
+          <div className="fixed top-16 left-[75%]">
             <RightSidebar />
           </div>
         </div>

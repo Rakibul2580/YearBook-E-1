@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
   const [togol, setTotol] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:5000/user/${user?.email}`)
+    fetch(`https://yourbookserver-rakibul2580.vercel.app/user/${user?.email}`)
       .then((res) => res.json())
       .then((data) => setUserData(data))
       .catch((err) => console.error(err));
@@ -56,6 +56,7 @@ const AuthProvider = ({ children }) => {
       unsubscribe();
     };
   }, []);
+  console.log(user);
 
   const authInfo = {
     user,

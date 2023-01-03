@@ -49,7 +49,7 @@ const SingIn = () => {
         };
         signUp(email, password)
           .then((result) => {
-            fetch("http://localhost:5000/user", {
+            fetch("https://yourbookserver-rakibul2580.vercel.app/user", {
               method: "POST",
               headers: {
                 "content-type": "application/json",
@@ -74,6 +74,7 @@ const SingIn = () => {
     reset();
   };
   const handelSignIn = (event) => {
+    SetAnimate(true);
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
@@ -81,6 +82,7 @@ const SingIn = () => {
 
     signIn(email, password)
       .then((result) => {
+        SetAnimate(false);
         toast.success("LogIn Successfully");
         localStorage.setItem("Token", JSON.stringify(result.user.uid));
         navigate(from, { replace: true });
@@ -98,7 +100,7 @@ const SingIn = () => {
             : "w-100% h-screen mt-20 flex justify-center items-center"
         }
       >
-        <div className="w-full max-w-md p-4 rounded-md shadow sm:p-8 dark:bg-gray-900 dark:text-gray-100">
+        <div className="w-full max-w-md p-4 rounded-md shadow sm:p-8 bg-width text-block">
           <div className="mb-5">
             <h2 className="mb-3 text-3xl font-semibold text-center">
               Create a new account
@@ -118,7 +120,7 @@ const SingIn = () => {
                     type="text"
                     {...register("fastName", { required: true })}
                     placeholder="Fast Name *"
-                    className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                    className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                   />
                 </div>
                 <div className="space-y-2">
@@ -126,7 +128,7 @@ const SingIn = () => {
                     type="text"
                     {...register("lastName", { required: true })}
                     placeholder="Last Name *"
-                    className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                    className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                   />
                 </div>
               </div>
@@ -135,7 +137,7 @@ const SingIn = () => {
                   type="file"
                   {...register("image", { required: true })}
                   placeholder="Mobile number or email *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2">
@@ -143,7 +145,7 @@ const SingIn = () => {
                   type="email"
                   {...register("email", { required: true })}
                   placeholder="Mobile number or email *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2">
@@ -151,7 +153,7 @@ const SingIn = () => {
                   type="password"
                   {...register("password", { required: true })}
                   placeholder="Password *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
             </div>
@@ -163,7 +165,7 @@ const SingIn = () => {
                 <input
                   type="date"
                   {...register("birthday", { required: true })}
-                  className="w-full px-3 py-[8px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-[8px] border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2 w-full">
@@ -172,7 +174,7 @@ const SingIn = () => {
                 </label>
                 <select
                   {...register("gender", { required: true })}
-                  className="w-full px-3 py-[9.5px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-[9.5px] border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 >
                   <option defaultValue>Select Gender</option>
                   <option>Female</option>
@@ -185,7 +187,7 @@ const SingIn = () => {
             {!animate && (
               <button
                 type="submit"
-                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
+                className="w-full px-8 py-3 font-semibold rounded-md bg-green-500 dark:text-gray-100"
               >
                 Sign up
               </button>
@@ -193,7 +195,7 @@ const SingIn = () => {
             {animate && (
               <button
                 type="submit"
-                className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
+                className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-green-500 dark:text-gray-100"
               >
                 <div className="w-6 h-6  border-4 border-dashed rounded-full animate-spin dark:border-white"></div>
               </button>
@@ -206,7 +208,7 @@ const SingIn = () => {
             <p className="px-3 dark:text-gray-400">OR</p>
             <hr className="w-full dark:text-gray-400" />
           </div>
-          <p className="text-sm text-center dark:text-gray-400">
+          <p className="text-sm text-center dark:text-gray-900">
             Already have an account?
             <button
               onClick={() => setData(!data)}
@@ -222,7 +224,7 @@ const SingIn = () => {
           !data ? "hidden" : "w-100% h-screen flex justify-center items-center"
         }
       >
-        <div className="w-full max-w-md p-4 rounded-md shadow sm:p-8 dark:bg-gray-900 dark:text-gray-100">
+        <div className="w-full max-w-md p-4 rounded-md shadow sm:p-8 dark:bg-width dark:text-black">
           <div className="mb-5">
             <h2 className="mb-3 text-3xl font-semibold text-center">
               Log Into Facebook
@@ -239,7 +241,7 @@ const SingIn = () => {
                   name="email"
                   required
                   placeholder="Mobile number or email *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2">
@@ -248,19 +250,29 @@ const SingIn = () => {
                   name="password"
                   required
                   placeholder="Password *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <button className="mt-4 text-center text-sky-600">
                 Forgot account?
               </button>
             </div>
-            <button
-              type="submit"
-              className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
-            >
-              Sign in
-            </button>
+            {!animate && (
+              <button
+                type="submit"
+                className="w-full px-8 py-3 font-semibold rounded-md bg-green-500 dark:text-gray-100"
+              >
+                Sign in
+              </button>
+            )}
+            {animate && (
+              <button
+                type="submit"
+                className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-green-500 dark:text-gray-100"
+              >
+                <div className="w-6 h-6  border-4 border-dashed rounded-full animate-spin dark:border-white"></div>
+              </button>
+            )}
           </form>
 
           <div className="my-6 space-y-4"></div>
@@ -269,7 +281,7 @@ const SingIn = () => {
             <p className="px-3 dark:text-gray-400">OR</p>
             <hr className="w-full dark:text-gray-400" />
           </div>
-          <p className="text-sm text-center dark:text-gray-400">
+          <p className="text-sm text-center dark:text-gray-900">
             Create new account
             <button
               onClick={() => setData(!data)}

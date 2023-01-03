@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="navbar bg-green-600 z-20 fixed">
+      <div className="navbar bg-green-500 z-20 fixed">
         <div className="navbar-start">
           <Link to="/">
             <img src={logo} alt="" className="w-28 h-auto" />

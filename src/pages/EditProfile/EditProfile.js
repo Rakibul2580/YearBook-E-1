@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../../context/AuthProvider";
 
 const EditProfile = () => {
-  const { user, profile, userData, setTotol } = useContext(AuthContext);
+  const { profile, userData, setTotol } = useContext(AuthContext);
+  const [animate, SetAnimate] = useState(false);
 
   const {
     register,
@@ -14,6 +15,7 @@ const EditProfile = () => {
   } = useForm();
   const x = "28273534f15193232bf3f2551f053a4c";
   const handelSignUp = (data) => {
+    SetAnimate(true);
     const { fastName, lastName, birthday, gender } = data;
     const img = data.image[0];
     const formData = new FormData();
@@ -33,19 +35,23 @@ const EditProfile = () => {
           gender,
           img: url,
         };
-        fetch(`http://localhost:5000/user/${userData?._id}`, {
-          method: "PUT",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(user),
-        })
+        fetch(
+          `https://yourbookserver-rakibul2580.vercel.app/user/${userData?._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(user),
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             const name = fastName + " " + lastName;
             profile(name, url);
             setTotol((togol) => !togol);
-            toast.success("SingUp Successfully");
+            toast.success("Edit Profile Successfully");
+            SetAnimate(false);
           })
           .catch((err) => console.log(err));
       })
@@ -57,7 +63,7 @@ const EditProfile = () => {
   return (
     <div>
       <div>
-        <div className="w-full -mt-4 max-w-md p-4 rounded-md shadow sm:p-8 dark:bg-gray-100 dark:text-gray-900">
+        <div className="w-full -mt-4 p-4 rounded-md shadow sm:p-8 dark:bg-width dark:text-black">
           <div className="mb-5">
             <h2 className="mb-3 text-3xl font-semibold text-center">
               Create a new account
@@ -79,7 +85,7 @@ const EditProfile = () => {
                   type="text"
                   {...register("fastName", { required: true })}
                   placeholder="Fast Name *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2">
@@ -90,7 +96,7 @@ const EditProfile = () => {
                   type="text"
                   {...register("lastName", { required: true })}
                   placeholder="Last Name *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2 space-x-2 flex items-center">
@@ -103,7 +109,7 @@ const EditProfile = () => {
                   type="file"
                   {...register("image", { required: true })}
                   placeholder="Mobile number or email *"
-                  className="w-full px-3 py-2 border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-2 border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
             </div>
@@ -115,7 +121,7 @@ const EditProfile = () => {
                 <input
                   type="date"
                   {...register("birthday", { required: true })}
-                  className="w-full px-3 py-[8px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-[8px] border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 />
               </div>
               <div className="space-y-2 w-full">
@@ -124,7 +130,7 @@ const EditProfile = () => {
                 </label>
                 <select
                   {...register("gender", { required: true })}
-                  className="w-full px-3 py-[9.5px] border rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 focus:dark:border-violet-400"
+                  className="w-full px-3 py-[9.5px] border rounded-md dark:border-gray-900 dark:bg-gray-100 dark:text-gray-900 focus:dark:border-violet-400"
                 >
                   <option defaultValue>Select Gender</option>
                   <option>Female</option>
@@ -134,18 +140,22 @@ const EditProfile = () => {
               </div>
             </div>
             {errors.exampleRequired && <span>This field is required</span>}
-            <button
-              type="submit"
-              className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
-            >
-              Sign up
-            </button>
-            <button
-              type="submit"
-              className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-violet-400 dark:text-gray-900"
-            >
-              <div className="w-6 h-6  border-4 border-dashed rounded-full animate-spin dark:border-white"></div>
-            </button>
+            {!animate && (
+              <button
+                type="submit"
+                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-green-500 dark:text-gray-100"
+              >
+                Submit
+              </button>
+            )}
+            {animate && (
+              <button
+                type="submit"
+                className="w-full flex justify-center px-8 py-3 font-semibold rounded-md dark:bg-green-500 dark:text-gray-100"
+              >
+                <div className="w-6 h-6  border-4 border-dashed rounded-full animate-spin dark:border-white"></div>
+              </button>
+            )}
           </form>
         </div>
       </div>

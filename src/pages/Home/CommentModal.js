@@ -24,13 +24,16 @@ const CommentModal = ({ comments, SetModal, setCount }) => {
       img: photoURL,
     };
     SetModal("1");
-    fetch(`http://localhost:5000/comment/${comments._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(comment),
-    })
+    fetch(
+      `https://yourbookserver-rakibul2580.vercel.app/comment/${comments._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(comment),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setCount((count) => !count);
