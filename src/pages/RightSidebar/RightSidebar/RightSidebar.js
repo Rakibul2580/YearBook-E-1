@@ -9,7 +9,6 @@ const RightSidebar = () => {
       .then((data) => setUsers(data))
       .catch((err) => console.log(err));
   }, []);
-  console.log(users);
   return (
     <div className="justify-center items-center bg-gray-100">
       <div>
@@ -19,7 +18,7 @@ const RightSidebar = () => {
       </div>
       <div className="overflow-auto h-96 mb-16">
         {users.map((user) => (
-          <div key={user._id} className="my-3 bg-white py-2 rounded-md">
+          <div key={user._id} className="my-3 bg-white py-4 rounded-xl">
             <div className="flex mx-[5%] justify-start items-start ">
               <img
                 src={user.img}

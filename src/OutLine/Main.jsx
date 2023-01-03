@@ -9,16 +9,16 @@ const Main = () => {
     <div>
       <Navbar />
       <div className="flex">
-        <div className="w-[25%] ">
-          <div className="fixed top-16 left-0 right-[75%]">
+        <div className="md:w-[25%] w-[10%]">
+          <div className="fixed top-16 left-0 right-[90%] md:right-[75%]">
             <LeftSidebar />
           </div>
         </div>
-        <div className="w-[50%] mt-16 text-center">
+        <div className="md:w-[50%] w-[65%] mt-16 text-center">
           <Outlet />
         </div>
-        <div className="w-[25%] mt-16">
-          <div className="fixed top-16 left-[75%]">
+        <div className="md:w-[25%] mt-16">
+          <div className="fixed top-16 left-[75%] md:w-[25%]">
             <RightSidebar />
           </div>
         </div>

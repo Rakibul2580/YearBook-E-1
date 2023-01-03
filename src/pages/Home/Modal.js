@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../context/AuthProvider";
 
-const Modal = ({ SetModal }) => {
+const Modal = ({ setCount, SetModal }) => {
   const { user, userData } = useContext(AuthContext);
   const displayName = user?.displayName;
   const email = user?.email;
@@ -45,6 +45,7 @@ const Modal = ({ SetModal }) => {
         })
           .then((res) => res.json())
           .then((data) => {
+            setCount((count) => !count);
             SetModal("");
             console.log(data);
           })

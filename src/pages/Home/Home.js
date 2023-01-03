@@ -17,6 +17,7 @@ const Home = () => {
     fetch("https://yourbookserver-rakibul2580.vercel.app/post")
       .then((res) => res.json())
       .then((data) => {
+        data.reverse();
         setPosts(data);
         setLoader(false);
       })
@@ -31,10 +32,11 @@ const Home = () => {
       img: user?.photoURL,
     };
 
-    const match = posts.find((post) => post._id === id);
-    const likeMatch = match.like.find((post) => post?.email === user?.email);
+    const match = posts?.find((post) => post._id === id);
+    const likeMatch = match?.like?.find((post) => post?.email === user?.email);
+    const pushLike = match?.like?.filter((post) => post?.email !== user?.email);
     if (likeMatch) {
-      handelDelete(likeMatch, id);
+      handelDelete(pushLike, id);
     } else {
       fetch(`https://yourbookserver-rakibul2580.vercel.app/post/${id}`, {
         method: "PUT",
@@ -49,13 +51,13 @@ const Home = () => {
     }
   };
 
-  const handelDelete = (likeMatch, id) => {
+  const handelDelete = (pushLike, id) => {
     fetch(`https://yourbookserver-rakibul2580.vercel.app/like/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(likeMatch),
+      body: JSON.stringify(pushLike),
     })
       .then((res) => res.json())
       .then((data) => setCount(!count))
@@ -102,7 +104,7 @@ const Home = () => {
               {post?.userImg && (
                 <div className="avatar online">
                   <div className="w-10 bg-slate-200 rounded-full">
-                    <img src={post?.user?.img} alt="" />
+                    <img src={post?.userImg} alt="" />
                   </div>
                 </div>
               )}
@@ -164,7 +166,7 @@ const Home = () => {
           </div>
         </div>
       ))}
-      {!modal && <Modal SetModal={SetModal}></Modal>}
+      {!modal && <Modal setCount={setCount} SetModal={SetModal}></Modal>}
       {!modal && (
         <CommentModal
           setCount={setCount}
